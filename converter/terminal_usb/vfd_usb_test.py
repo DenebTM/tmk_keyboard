@@ -22,7 +22,7 @@ import usb.util
 # Bulk Vendor HID device VID and PID
 vid = 0xfeed
 pid = 0x6535
-ep_addr = 0x02
+ep_addr = 0x03
 
 cmd_write = b'\x02\x01'
 cmd_clear = b'\x03\x00'
