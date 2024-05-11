@@ -1,0 +1,12 @@
+CompileFlags:
+  Compiler: avr-gcc
+  Add: [
+    -I/home/deneb/tmk_keyboard/tmk_core/common,
+    -I/home/deneb/tmk_keyboard/tmk_core/protocol/lufa/lufa-abcminiuser,
+    -I/usr/avr/include,
+    -DUSE_STATIC_OPTIONS,
+    -mmcu=atmega32u4,
+    -DF_CPU=16000000,
+    -DF_USB=F_CPU,
+    -DVFD_ENABLE=yes,
+  ]

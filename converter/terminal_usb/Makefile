@@ -10,7 +10,10 @@ TARGET_DIR = .
 # keyboard dependent files
 SRC = 	keymap.c \
 	matrix.c \
-	led.c
+	led.c \
+	vfd_leds.c \
+	vfd_usb.c \
+	hd44780/hd44780.c
 
 CONFIG_H = config.h
 
@@ -55,7 +58,8 @@ F_USB = $(F_CPU)
 #   Teensy halfKay   512
 #   Atmel DFU loader 4096
 #   LUFA bootloader  4096
-OPT_DEFS += -DBOOTLOADER_SIZE=4096
+OPT_DEFS += -DBOOTLOADER_SIZE=4096 \
+			-DVFD_ENABLE # 16x2 HD44780-compatible VFD
 
 
 # Build Options
@@ -64,10 +68,10 @@ OPT_DEFS += -DBOOTLOADER_SIZE=4096
 #BOOTMAGIC_ENABLE = yes	# Virtual DIP switch configuration(+1000)
 #MOUSEKEY_ENABLE = yes	# Mouse keys(+4700)
 #EXTRAKEY_ENABLE = yes	# Audio control and System control(+450)
-CONSOLE_ENABLE = yes	# Console for debug(+400)
-COMMAND_ENABLE = yes    # Commands for debug and configuration
-#SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
-#NKRO_ENABLE = yes	# USB Nkey Rollover
+#CONSOLE_ENABLE = yes	 # Console for debug(+400)
+#COMMAND_ENABLE = yes    # Commands for debug and configuration
+#SLEEP_LED_ENABLE = yes # Breathing sleep LED during USB suspend
+#NKRO_ENABLE = yes		# USB Nkey Rollover
 
 
 #

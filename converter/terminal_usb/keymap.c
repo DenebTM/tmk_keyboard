@@ -1,3 +1,4 @@
+// clang-format off
 /*
 Copyright 2012 Jun Wako <wakojun@gmail.com>
 
@@ -121,13 +122,13 @@ const uint8_t PROGMEM fn_keycode[] = {
 const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
      *               ,-----------------------------------------------.
-     *               |F13|F14|F15|F16|F17|F18|F19|F20|F21|F22|F23|F24|
+     *               |F13|F14|F15|F16|F17|F18|F19|F20|F21|PrS|ScL|Pau|
      *               `-----------------------------------------------'
      *               ,-----------------------------------------------.
      *               |F1 |F2 |F3 |F4 |F5 |F6 |F7 |F8 |F9 |F10|F11|F12|
      *               `-----------------------------------------------'
      * ,-------. ,-----------------------------------------------------------. ,-----------. ,---------------.
-     * |PrS|Esc| |  `|  1|  2|  3|  4|  5|  6|  7|  8|  9|  0|  -|  =|  \| BS| |Ins|Hom|PgU| |NmL|  /|  *|  -|
+     * |Esc|Gui| |  `|  1|  2|  3|  4|  5|  6|  7|  8|  9|  0|  -|  =|  \| BS| |Ins|Hom|PgU| |NmL|  /|  *|  -|
      * |-------| |-----------------------------------------------------------| |-----------| |---------------|
      * |ScL|In4| |Tab  |  Q|  W|  E|  R|  T|  Y|  U|  I|  O|  P|  [|  ]|    \| |Del|End|PgD| |  7|  8|  9|  +|
      * |-------| |-----------------------------------------------------------| `-----------' |-----------|---|
@@ -135,18 +136,18 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |-------| |-----------------------------------------------------------| ,-----------. |---------------|
      * |App|In6| |Shif|  \|  Z|  X|  C|  V|  B|  N|  M|  ,|  ,|  /| RO| Shift| |Lef|In2|Rig| |  1|  2|  3|Ent|
      * |-------| |-----------------------------------------------------------| `-----------' |-----------|---|
-     * |Gui|Gui| |Ctrl|    |Alt |          Space              |Alt |    |Ctrl|     |Dow|     | 00|  0|  .|  =|
+     * |Gui|App| |Ctrl|    |Alt |          Space              |Alt |    |Ctrl|     |Dow|     | 00|  0|  .|  =|
      * `-------' `----'    `---------------------------------------'    `----'     `---'     `---------------'
      */
     KEYMAP(
-                     F13, F14, F15, F16, F17, F18, F19, F20, F21, F22, F23, F24,
+                     F13, F14, F15, F16, F17, F18, F19, F20, F21, PSCR,SLCK,PAUS,
                      F1,  F2,  F3,  F4,  F5,  F6,  F7,  F8,  F9,  F10, F11, F12,
 
-    PSCR,ESC,   GRV, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, JYEN,BSPC,  INS, HOME,PGUP,  NLCK,PSLS,PAST,PMNS,
+    ESC, RGUI,  GRV, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, JYEN,BSPC,  INS, HOME,PGUP,  NLCK,PSLS,PAST,PMNS,
     SLCK,INT4,  TAB, Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,   LBRC,RBRC,     BSLS,  DEL, END, PGDN,  P7,  P8,  P9,  PPLS,
     PAUS,INT5,  CAPS,A,   S,   D,   F,   G,   H,   J,   K,   L,   SCLN,QUOT,     NUHS,ENT,        UP,         P4,  P5,  P6,  PCMM,
     APP, INT6,  LSFT,NUBS,Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, SLSH,     RO,  RSFT,  LEFT,INT2,RGHT,  P1,  P2,  P3,  PENT,
-    RGUI,LGUI,  LCTL,     LALT,               SPC,                          RALT,     RCTL,       DOWN,       P00, P0,  PDOT,PEQL
+    LGUI,APP,   LCTL,     LALT,               SPC,                          RALT,     RCTL,       DOWN,       P00, P0,  PDOT,PEQL
     ),
 
 
@@ -170,11 +171,11 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KEYMAP_102(
     ESC, F1,  F2,  F3,  F4,  F5,  F6,  F7,  F8,  F9,  F10, F11, F12,             PSCR,SLCK,PAUS,
 
-    GRV, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, JYEN,BSPC,  INS, HOME,PGUP,  NLCK,PSLS,PAST,PMNS,
-    TAB, Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,   LBRC,RBRC,     BSLS,  DEL, END, PGDN,  P7,  P8,  P9,  PPLS,
+    GRV, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, JYEN,BSPC,  INS, HOME,PGUP,  NLCK,PSLS,PAST,PMNS, TAB, Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,   LBRC,RBRC,     BSLS,  DEL, END, PGDN,  P7,  P8,  P9,  PPLS,
     CAPS,A,   S,   D,   F,   G,   H,   J,   K,   L,   SCLN,QUOT,     NUHS,ENT,                    P4,  P5,  P6,  PCMM,
     LSFT,NUBS,Z,   X,   C,   V,   B,   N,   M,   COMM,DOT, SLSH,     RO,  RSFT,       UP,         P1,  P2,  P3,  PENT,
     LCTL,     LALT,               SPC,                          RALT,     RCTL,  LEFT,DOWN,RGHT,  P00, P0,  PDOT,PEQL
     ),
 #endif
 };
+// clang-format on
