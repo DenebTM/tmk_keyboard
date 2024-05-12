@@ -305,6 +305,8 @@ void EVENT_USB_Device_Reset(void) {
 #ifdef MOUSE_ENABLE
   mouse_protocol = 1;
 #endif
+
+  hook_usb_reset();
 }
 
 void EVENT_USB_Device_Suspend() {
@@ -852,3 +854,5 @@ __attribute__((weak)) void hook_usb_wakeup(void) {
 }
 
 __attribute__((weak)) void hook_usb_startup_wait_loop(void) {}
+
+__attribute__((weak)) void hook_usb_reset(void) {}

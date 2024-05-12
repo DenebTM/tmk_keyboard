@@ -56,6 +56,10 @@ void hook_usb_wakeup(void);
 /* Default behaviour: do nothing. */
 void hook_usb_startup_wait_loop(void);
 
+/* Called once upon USB Reset event */
+/* Default behaviour: do nothing. */
+void hook_usb_reset(void);
+
 /* Called periodically from main loop */
 /* Default behaviour: do nothing. */
 void hook_main_loop(void);

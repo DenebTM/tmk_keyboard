@@ -8,10 +8,13 @@
 
 uint8_t last_led_status;
 
-void hook_late_init() {
+void vfd_init() {
   hd44780_init();
   hd44780_write(0x94);
+}
 
+void hook_late_init() {
+  vfd_init();
   last_led_status = host_keyboard_leds();
 }
 
@@ -26,7 +29,7 @@ struct {
     {.bit = (1 << USB_LED_SCROLL_LOCK), .lcd_col = COL_SCROLL_LOCK, .text_off = "    ", .text_on = "SCRL"},
 };
 
-void hook_keyboard_leds_change(uint8_t led_status) {
+void update_leds(uint8_t led_status) {
   uint8_t led_diff = ~(last_led_status ^ led_status);
 
   for (uint8_t i = 0; i < sizeof(leds_cols) / sizeof(leds_cols[0]); i++) {
@@ -37,7 +40,14 @@ void hook_keyboard_leds_change(uint8_t led_status) {
   last_led_status = led_status;
 }
 
+void hook_keyboard_leds_change(uint8_t led_status) { update_leds(led_status); }
+
 void hook_usb_suspend_entry() { hd44780_command(HD44780_DISPLAYCONTROL | HD44780_DISPLAYOFF); }
 void hook_usb_wakeup() { hd44780_command(HD44780_DISPLAYCONTROL | HD44780_DISPLAYON); }
+
+// void hook_usb_reset() {
+//   vfd_init();
+//   update_leds(host_keyboard_leds());
+// }
 
 #endif
