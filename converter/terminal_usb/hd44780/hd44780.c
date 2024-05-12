@@ -112,3 +112,11 @@ void vfd_set_brightness(uint8_t brightness) {
   // restore cursor position
   hd44780_setcursor(cursor_x, cursor_y);
 }
+
+void hd44780_define_char(uint8_t id, uint8_t rows[8]) {
+  id &= 0x7;
+  hd44780_command(HD44780_SETCGRAMADDR | (id << 3));
+  for (int i = 0; i < 8; i++) {
+    hd44780_write(rows[i]);
+  }
+}

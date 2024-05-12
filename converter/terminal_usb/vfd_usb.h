@@ -14,7 +14,7 @@
 #define VFD_CMD_SETCURSOR 0x01
 
 /**
- * 0x02 <N> <char #1/N ... #N/N>
+ * 0x02 <N> <chars 1..N>
  */
 #define VFD_CMD_WRITE 0x02
 #define VFD_CMD_WRITE_N (VFD_CMD_WRITE | 0x80)
@@ -30,9 +30,9 @@
 #define VFD_CMD_BRIGHTNESS 0x04
 
 /**
- * TODO
- * 0x0f <char id> <character definition>
+ * 0x05 <char id> <rows 1..8>
  */
-#define VFD_CMD_DEFINECHAR 0x0f
+#define VFD_CMD_DEFINECHAR 0x05
+#define VFD_CMD_DEFINECHAR_ID (VFD_CMD_DEFINECHAR | 0x80)
 
 #endif

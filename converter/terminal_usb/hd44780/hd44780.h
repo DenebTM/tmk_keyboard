@@ -75,6 +75,8 @@ void hd44780_putchar(char c);
 void hd44780_print(char *s);
 void hd44780_setcursor(uint8_t col, uint8_t row);
 
+void hd44780_define_char(uint8_t id, uint8_t rows[8]);
+
 void vfd_set_brightness(uint8_t brightness);
 
 #endif

@@ -5,7 +5,6 @@
 #include "hd44780/hd44780.h"
 
 uint8_t vfd_usb_command = VFD_CMD_NONE;
-uint8_t vfd_usb_write_count = 0;
 uint8_t vfd_usb_col = 0;
 
 /**
@@ -42,23 +41,45 @@ void vfd_usb_task() {
         vfd_usb_command = VFD_CMD_NONE;
         break;
 
-      case VFD_CMD_WRITE:
-        vfd_usb_write_count = data_byte;
+      case VFD_CMD_WRITE: {
+        static uint8_t write_count = 0;
+        write_count = data_byte;
         vfd_usb_command = VFD_CMD_WRITE_N;
         break;
 
-      case VFD_CMD_WRITE_N:
-        vfd_usb_putchar(data_byte);
-        vfd_usb_write_count--;
-        if (vfd_usb_write_count == 0) {
-          vfd_usb_command = VFD_CMD_NONE;
-        }
-        break;
+        case VFD_CMD_WRITE_N:
+          vfd_usb_putchar(data_byte);
+          write_count--;
+          if (write_count == 0) {
+            vfd_usb_command = VFD_CMD_NONE;
+          }
+          break;
+      }
 
       case VFD_CMD_BRIGHTNESS:
         vfd_set_brightness(data_byte);
         vfd_usb_command = VFD_CMD_NONE;
         break;
+
+      case VFD_CMD_DEFINECHAR: {
+        static uint8_t char_id;
+        static uint8_t char_rows[8];
+        static uint8_t char_rows_idx = 0;
+
+        char_id = data_byte;
+        vfd_usb_command = VFD_CMD_DEFINECHAR_ID;
+        break;
+
+        case VFD_CMD_DEFINECHAR_ID:
+          char_rows[char_rows_idx++] = data_byte;
+          if (char_rows_idx >= 8) {
+            vfd_usb_command = VFD_CMD_NONE;
+            char_rows_idx = 0;
+
+            hd44780_define_char(char_id, char_rows);
+          }
+          break;
+      }
 
       case VFD_CMD_CLEAR:
         vfd_usb_col = 0;
