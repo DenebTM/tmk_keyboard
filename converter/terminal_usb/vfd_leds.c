@@ -1,16 +1,22 @@
 #ifdef VFD_ENABLE
 
-#include "vfd_leds.h"
-#include "../../tmk_core/common/hook.h"
-#include "../../tmk_core/common/host.h"
-#include "../../tmk_core/common/led.h"
+#include "hook.h"
+#include "host.h"
+#include "led.h"
+
 #include "hd44780/hd44780.h"
+#include "vfd_leds.h"
 
 uint8_t last_led_status;
 
+void clear_led_row() {
+  hd44780_setcursor(0, 0);
+  hd44780_print("\x94               ");
+}
+
 void vfd_init() {
   hd44780_init();
-  hd44780_write(0x94);
+  clear_led_row();
 }
 
 void hook_late_init() {
@@ -29,7 +35,7 @@ struct {
     {.bit = (1 << USB_LED_SCROLL_LOCK), .lcd_col = COL_SCROLL_LOCK, .text_off = "    ", .text_on = "SCRL"},
 };
 
-void update_leds(uint8_t led_status) {
+void update_led_row(uint8_t led_status) {
   uint8_t led_diff = ~(last_led_status ^ led_status);
 
   for (uint8_t i = 0; i < sizeof(leds_cols) / sizeof(leds_cols[0]); i++) {
@@ -40,14 +46,15 @@ void update_leds(uint8_t led_status) {
   last_led_status = led_status;
 }
 
-void hook_keyboard_leds_change(uint8_t led_status) { update_leds(led_status); }
+void hook_keyboard_leds_change(uint8_t led_status) { update_led_row(led_status); }
 
 void hook_usb_suspend_entry() { hd44780_command(HD44780_DISPLAYCONTROL | HD44780_DISPLAYOFF); }
 void hook_usb_wakeup() { hd44780_command(HD44780_DISPLAYCONTROL | HD44780_DISPLAYON); }
 
+// TODO: this doesn't work
 // void hook_usb_reset() {
-//   vfd_init();
-//   update_leds(host_keyboard_leds());
+//   clear_led_row();
+//   update_led_row(host_keyboard_leds());
 // }
 
 #endif
