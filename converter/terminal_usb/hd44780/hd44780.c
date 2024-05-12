@@ -52,12 +52,13 @@ void hd44780_send(uint8_t data, bool rs) {
   HD44780_DATA = data;
 
   // pulse enable pin
+  // casually doing this ~100x faster than the spec claims is allowed
   HD44780_CTRL &= ~HD44780_EN;
   _delay_us(1);
   HD44780_CTRL |= HD44780_EN;
   _delay_us(2);
   HD44780_CTRL &= ~HD44780_EN;
-  _delay_us(20);
+  _delay_us(2);
 }
 
 void hd44780_command(uint8_t data) { hd44780_send(data, false); }
