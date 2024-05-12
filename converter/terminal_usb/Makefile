@@ -58,8 +58,9 @@ F_USB = $(F_CPU)
 #   Teensy halfKay   512
 #   Atmel DFU loader 4096
 #   LUFA bootloader  4096
-OPT_DEFS += -DBOOTLOADER_SIZE=4096 \
-			-DVFD_ENABLE # 16x2 HD44780-compatible VFD
+OPT_DEFS += -DBOOTLOADER_SIZE=4096
+OPT_DEFS += -DSUSPEND_MODE_STANDBY # fix sleep issues
+OPT_DEFS += -DVFD_ENABLE # 16x2 HD44780-compatible VFD
 
 
 # Build Options

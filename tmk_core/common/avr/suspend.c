@@ -146,7 +146,8 @@ ISR(WDT_vect)
     // compensate timer for sleep
     switch (wdt_timeout) {
         case WDTO_15MS:
-            timer_count += 15 + 2;  // WDTO_15MS + 2(from observation)
+            // timer_count += 15 + 2;  // WDTO_15MS + 2(from observation)
+            timer_count += 15 + 4;  // WDTO_15MS + 4 is more accurate on Teensy 2.0 (deneb's observation)
             break;
         default:
             ;

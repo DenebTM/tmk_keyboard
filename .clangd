@@ -25,4 +25,5 @@ CompileFlags:
     -DTMK_VERSION=144c3e,
     -DMATRIX_ROWS=17,
     -DMATRIX_COLS=8,
+    -DSUSPEND_MODE_STANDBY,
   ]
