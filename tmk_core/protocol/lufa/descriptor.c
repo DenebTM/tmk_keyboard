@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2012 Jun Wako <wakojun@gmail.com>
  * This file is based on:
  *     LUFA-120219/Demos/Device/Lowlevel/KeyboardMouse
@@ -36,240 +36,245 @@
   this software.
 */
 
-#include "descriptor.h"
-#include "report.h"
 #include "util.h"
+#include "report.h"
+#include "descriptor.h"
+
 
 /*******************************************************************************
  * HID Report Descriptors
  ******************************************************************************/
 #ifndef NO_KEYBOARD
-const USB_Descriptor_HIDReport_Datatype_t PROGMEM KeyboardReport[] = {
+const USB_Descriptor_HIDReport_Datatype_t PROGMEM KeyboardReport[] =
+{
 #ifndef NKRO_ENABLE
     /* 6KRO - Boot protocol */
-    HID_RI_USAGE_PAGE(8, 0x01),    /* Generic Desktop */
-    HID_RI_USAGE(8, 0x06),         /* Keyboard */
-    HID_RI_COLLECTION(8, 0x01),    /* Application */
-    HID_RI_USAGE_PAGE(8, 0x07),    /* Key Codes */
-    HID_RI_USAGE_MINIMUM(8, 0xE0), /* Keyboard Left Control */
-    HID_RI_USAGE_MAXIMUM(8, 0xE7), /* Keyboard Right GUI */
-    HID_RI_LOGICAL_MINIMUM(8, 0x00),
-    HID_RI_LOGICAL_MAXIMUM(8, 0x01),
-    HID_RI_REPORT_COUNT(8, 0x08),
-    HID_RI_REPORT_SIZE(8, 0x01),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
+    HID_RI_USAGE_PAGE(8, 0x01), /* Generic Desktop */
+    HID_RI_USAGE(8, 0x06), /* Keyboard */
+    HID_RI_COLLECTION(8, 0x01), /* Application */
+        HID_RI_USAGE_PAGE(8, 0x07), /* Key Codes */
+        HID_RI_USAGE_MINIMUM(8, 0xE0), /* Keyboard Left Control */
+        HID_RI_USAGE_MAXIMUM(8, 0xE7), /* Keyboard Right GUI */
+        HID_RI_LOGICAL_MINIMUM(8, 0x00),
+        HID_RI_LOGICAL_MAXIMUM(8, 0x01),
+        HID_RI_REPORT_COUNT(8, 0x08),
+        HID_RI_REPORT_SIZE(8, 0x01),
+        HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
 
-    HID_RI_REPORT_COUNT(8, 0x01),
-    HID_RI_REPORT_SIZE(8, 0x08),
-    HID_RI_INPUT(8, HID_IOF_CONSTANT), /* reserved */
+        HID_RI_REPORT_COUNT(8, 0x01),
+        HID_RI_REPORT_SIZE(8, 0x08),
+        HID_RI_INPUT(8, HID_IOF_CONSTANT),  /* reserved */
 
-    HID_RI_USAGE_PAGE(8, 0x08),    /* LEDs */
-    HID_RI_USAGE_MINIMUM(8, 0x01), /* Num Lock */
-    HID_RI_USAGE_MAXIMUM(8, 0x05), /* Kana */
-    HID_RI_REPORT_COUNT(8, 0x05),
-    HID_RI_REPORT_SIZE(8, 0x01),
-    HID_RI_OUTPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE | HID_IOF_NON_VOLATILE),
-    HID_RI_REPORT_COUNT(8, 0x01),
-    HID_RI_REPORT_SIZE(8, 0x03),
-    HID_RI_OUTPUT(8, HID_IOF_CONSTANT),
+        HID_RI_USAGE_PAGE(8, 0x08), /* LEDs */
+        HID_RI_USAGE_MINIMUM(8, 0x01), /* Num Lock */
+        HID_RI_USAGE_MAXIMUM(8, 0x05), /* Kana */
+        HID_RI_REPORT_COUNT(8, 0x05),
+        HID_RI_REPORT_SIZE(8, 0x01),
+        HID_RI_OUTPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE | HID_IOF_NON_VOLATILE),
+        HID_RI_REPORT_COUNT(8, 0x01),
+        HID_RI_REPORT_SIZE(8, 0x03),
+        HID_RI_OUTPUT(8, HID_IOF_CONSTANT),
 
-    HID_RI_USAGE_PAGE(8, 0x07), /* Keyboard */
-    HID_RI_USAGE_MINIMUM(8, 0x00),
-    HID_RI_USAGE_MAXIMUM(8, 0xFF), /* Usage ID 0x00-0xFF */
-    HID_RI_LOGICAL_MINIMUM(8, 0x00),
-    HID_RI_LOGICAL_MAXIMUM(16, 0x00FF), /* needs 16 bit to indicate positive value */
-    HID_RI_REPORT_COUNT(8, 0x06),
-    HID_RI_REPORT_SIZE(8, 0x08),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_ARRAY | HID_IOF_ABSOLUTE),
+        HID_RI_USAGE_PAGE(8, 0x07), /* Keyboard */
+        HID_RI_USAGE_MINIMUM(8, 0x00),
+        HID_RI_USAGE_MAXIMUM(8, 0xFF), /* Usage ID 0x00-0xFF */
+        HID_RI_LOGICAL_MINIMUM(8, 0x00),
+        HID_RI_LOGICAL_MAXIMUM(16, 0x00FF), /* needs 16 bit to indicate positive value */
+        HID_RI_REPORT_COUNT(8, 0x06),
+        HID_RI_REPORT_SIZE(8, 0x08),
+        HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_ARRAY | HID_IOF_ABSOLUTE),
     HID_RI_END_COLLECTION(0),
 #else
     /* NKRO - Report protocol */
-    HID_RI_USAGE_PAGE(8, 0x01),    /* Generic Desktop */
-    HID_RI_USAGE(8, 0x06),         /* Keyboard */
-    HID_RI_COLLECTION(8, 0x01),    /* Application */
-    HID_RI_USAGE_PAGE(8, 0x07),    /* Key Codes */
-    HID_RI_USAGE_MINIMUM(8, 0xE0), /* Keyboard Left Control */
-    HID_RI_USAGE_MAXIMUM(8, 0xE7), /* Keyboard Right GUI */
-    HID_RI_LOGICAL_MINIMUM(8, 0x00),
-    HID_RI_LOGICAL_MAXIMUM(8, 0x01),
-    HID_RI_REPORT_COUNT(8, 0x08),
-    HID_RI_REPORT_SIZE(8, 0x01),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
+    HID_RI_USAGE_PAGE(8, 0x01), /* Generic Desktop */
+    HID_RI_USAGE(8, 0x06), /* Keyboard */
+    HID_RI_COLLECTION(8, 0x01), /* Application */
+        HID_RI_USAGE_PAGE(8, 0x07), /* Key Codes */
+        HID_RI_USAGE_MINIMUM(8, 0xE0), /* Keyboard Left Control */
+        HID_RI_USAGE_MAXIMUM(8, 0xE7), /* Keyboard Right GUI */
+        HID_RI_LOGICAL_MINIMUM(8, 0x00),
+        HID_RI_LOGICAL_MAXIMUM(8, 0x01),
+        HID_RI_REPORT_COUNT(8, 0x08),
+        HID_RI_REPORT_SIZE(8, 0x01),
+        HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
 
-    HID_RI_USAGE_PAGE(8, 0x08),    /* LEDs */
-    HID_RI_USAGE_MINIMUM(8, 0x01), /* Num Lock */
-    HID_RI_USAGE_MAXIMUM(8, 0x05), /* Kana */
-    HID_RI_REPORT_COUNT(8, 0x05),
-    HID_RI_REPORT_SIZE(8, 0x01),
-    HID_RI_OUTPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE | HID_IOF_NON_VOLATILE),
-    HID_RI_REPORT_COUNT(8, 0x01),
-    HID_RI_REPORT_SIZE(8, 0x03),
-    HID_RI_OUTPUT(8, HID_IOF_CONSTANT),
+        HID_RI_USAGE_PAGE(8, 0x08), /* LEDs */
+        HID_RI_USAGE_MINIMUM(8, 0x01), /* Num Lock */
+        HID_RI_USAGE_MAXIMUM(8, 0x05), /* Kana */
+        HID_RI_REPORT_COUNT(8, 0x05),
+        HID_RI_REPORT_SIZE(8, 0x01),
+        HID_RI_OUTPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE | HID_IOF_NON_VOLATILE),
+        HID_RI_REPORT_COUNT(8, 0x01),
+        HID_RI_REPORT_SIZE(8, 0x03),
+        HID_RI_OUTPUT(8, HID_IOF_CONSTANT),
 
-    HID_RI_USAGE_PAGE(8, 0x07),                         /* Key Codes */
-    HID_RI_USAGE_MINIMUM(8, 0x00),                      /* Keyboard 0 */
-    HID_RI_USAGE_MAXIMUM(8, (NKRO_EPSIZE - 1) * 8 - 1), /* Keyboard Right GUI */
-    HID_RI_LOGICAL_MINIMUM(8, 0x00),
-    HID_RI_LOGICAL_MAXIMUM(8, 0x01),
-    HID_RI_REPORT_COUNT(8, (NKRO_EPSIZE - 1) * 8),
-    HID_RI_REPORT_SIZE(8, 0x01),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
+        HID_RI_USAGE_PAGE(8, 0x07), /* Key Codes */
+        HID_RI_USAGE_MINIMUM(8, 0x00), /* Keyboard 0 */
+        HID_RI_USAGE_MAXIMUM(8, (NKRO_EPSIZE-1)*8-1), /* Keyboard Right GUI */
+        HID_RI_LOGICAL_MINIMUM(8, 0x00),
+        HID_RI_LOGICAL_MAXIMUM(8, 0x01),
+        HID_RI_REPORT_COUNT(8, (NKRO_EPSIZE-1)*8),
+        HID_RI_REPORT_SIZE(8, 0x01),
+        HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
     HID_RI_END_COLLECTION(0),
 #endif
 };
 #endif
 
 #if defined(MOUSE_ENABLE) || defined(EXTRAKEY_ENABLE)
-const USB_Descriptor_HIDReport_Datatype_t PROGMEM MouseReport[] = {
+const USB_Descriptor_HIDReport_Datatype_t PROGMEM MouseReport[] =
+{
 #ifdef MOUSE_ENABLE
     HID_RI_USAGE_PAGE(8, 0x01), /* Generic Desktop */
-    HID_RI_USAGE(8, 0x02),      /* Mouse */
+    HID_RI_USAGE(8, 0x02), /* Mouse */
     HID_RI_COLLECTION(8, 0x01), /* Application */
-    HID_RI_USAGE(8, 0x01),      /* Pointer */
-    HID_RI_COLLECTION(8, 0x00), /* Physical */
+        HID_RI_USAGE(8, 0x01), /* Pointer */
+        HID_RI_COLLECTION(8, 0x00), /* Physical */
 
-    HID_RI_REPORT_ID(8, REPORT_ID_MOUSE),
+            HID_RI_REPORT_ID(8, REPORT_ID_MOUSE),
 
-    HID_RI_USAGE_PAGE(8, 0x09),    /* Button */
-    HID_RI_USAGE_MINIMUM(8, 0x01), /* Button 1 */
-    HID_RI_USAGE_MAXIMUM(8, 0x08), /* Button 8 */
-    HID_RI_LOGICAL_MINIMUM(8, 0x00),
-    HID_RI_LOGICAL_MAXIMUM(8, 0x01),
-    HID_RI_REPORT_COUNT(8, 0x08),
-    HID_RI_REPORT_SIZE(8, 0x01),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
+            HID_RI_USAGE_PAGE(8, 0x09), /* Button */
+            HID_RI_USAGE_MINIMUM(8, 0x01),  /* Button 1 */
+            HID_RI_USAGE_MAXIMUM(8, 0x08),  /* Button 8 */
+            HID_RI_LOGICAL_MINIMUM(8, 0x00),
+            HID_RI_LOGICAL_MAXIMUM(8, 0x01),
+            HID_RI_REPORT_COUNT(8, 0x08),
+            HID_RI_REPORT_SIZE(8, 0x01),
+            HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
 
 #ifndef MOUSE_EXT_REPORT
-    HID_RI_USAGE_PAGE(8, 0x01), /* Generic Desktop */
-    HID_RI_USAGE(8, 0x30),      /* Usage X */
-    HID_RI_USAGE(8, 0x31),      /* Usage Y */
-    HID_RI_LOGICAL_MINIMUM(8, -127),
-    HID_RI_LOGICAL_MAXIMUM(8, 127),
-    HID_RI_REPORT_COUNT(8, 0x02),
-    HID_RI_REPORT_SIZE(8, 0x08),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_RELATIVE),
+            HID_RI_USAGE_PAGE(8, 0x01), /* Generic Desktop */
+            HID_RI_USAGE(8, 0x30), /* Usage X */
+            HID_RI_USAGE(8, 0x31), /* Usage Y */
+            HID_RI_LOGICAL_MINIMUM(8, -127),
+            HID_RI_LOGICAL_MAXIMUM(8, 127),
+            HID_RI_REPORT_COUNT(8, 0x02),
+            HID_RI_REPORT_SIZE(8, 0x08),
+            HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_RELATIVE),
 #else
-    /* Boot protocol XY ignored in Report protocol */
-    HID_RI_USAGE_PAGE(8, 0xff), /* Vendor */
-    HID_RI_USAGE(8, 0xff),      /* Vendor  */
-    HID_RI_LOGICAL_MINIMUM(8, -127),
-    HID_RI_LOGICAL_MAXIMUM(8, 127),
-    HID_RI_REPORT_COUNT(8, 0x02),
-    HID_RI_REPORT_SIZE(8, 0x08),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_RELATIVE),
+            /* Boot protocol XY ignored in Report protocol */
+            HID_RI_USAGE_PAGE(8, 0xff), /* Vendor */
+            HID_RI_USAGE(8, 0xff), /* Vendor  */
+            HID_RI_LOGICAL_MINIMUM(8, -127),
+            HID_RI_LOGICAL_MAXIMUM(8, 127),
+            HID_RI_REPORT_COUNT(8, 0x02),
+            HID_RI_REPORT_SIZE(8, 0x08),
+            HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_RELATIVE),
 
-    HID_RI_USAGE_PAGE(8, 0x01), /* Generic Desktop */
-    HID_RI_USAGE(8, 0x30),      /* Usage X */
-    HID_RI_USAGE(8, 0x31),      /* Usage Y */
-    HID_RI_LOGICAL_MINIMUM(16, -32767),
-    HID_RI_LOGICAL_MAXIMUM(16, 32767),
-    HID_RI_REPORT_COUNT(8, 0x02),
-    HID_RI_REPORT_SIZE(8, 16),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_RELATIVE),
+            HID_RI_USAGE_PAGE(8, 0x01), /* Generic Desktop */
+            HID_RI_USAGE(8, 0x30), /* Usage X */
+            HID_RI_USAGE(8, 0x31), /* Usage Y */
+            HID_RI_LOGICAL_MINIMUM(16, -32767),
+            HID_RI_LOGICAL_MAXIMUM(16,  32767),
+            HID_RI_REPORT_COUNT(8, 0x02),
+            HID_RI_REPORT_SIZE(8, 16),
+            HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_RELATIVE),
 #endif
 
-    HID_RI_USAGE(8, 0x38), /* Wheel */
-    HID_RI_LOGICAL_MINIMUM(8, -127),
-    HID_RI_LOGICAL_MAXIMUM(8, 127),
-    HID_RI_REPORT_COUNT(8, 0x01),
-    HID_RI_REPORT_SIZE(8, 0x08),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_RELATIVE),
+            HID_RI_USAGE(8, 0x38), /* Wheel */
+            HID_RI_LOGICAL_MINIMUM(8, -127),
+            HID_RI_LOGICAL_MAXIMUM(8, 127),
+            HID_RI_REPORT_COUNT(8, 0x01),
+            HID_RI_REPORT_SIZE(8, 0x08),
+            HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_RELATIVE),
 
-    HID_RI_USAGE_PAGE(8, 0x0C), /* Consumer */
-    HID_RI_USAGE(16, 0x0238),   /* AC Pan (Horizontal wheel) */
-    HID_RI_LOGICAL_MINIMUM(8, -127),
-    HID_RI_LOGICAL_MAXIMUM(8, 127),
-    HID_RI_REPORT_COUNT(8, 0x01),
-    HID_RI_REPORT_SIZE(8, 0x08),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_RELATIVE),
+            HID_RI_USAGE_PAGE(8, 0x0C), /* Consumer */
+            HID_RI_USAGE(16, 0x0238), /* AC Pan (Horizontal wheel) */
+            HID_RI_LOGICAL_MINIMUM(8, -127),
+            HID_RI_LOGICAL_MAXIMUM(8, 127),
+            HID_RI_REPORT_COUNT(8, 0x01),
+            HID_RI_REPORT_SIZE(8, 0x08),
+            HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_RELATIVE),
 
-    HID_RI_END_COLLECTION(0),
+        HID_RI_END_COLLECTION(0),
     HID_RI_END_COLLECTION(0),
 #endif
 
 #ifdef EXTRAKEY_ENABLE
     HID_RI_USAGE_PAGE(8, 0x01), /* Generic Desktop */
-    HID_RI_USAGE(8, 0x80),      /* System Control */
+    HID_RI_USAGE(8, 0x80), /* System Control */
     HID_RI_COLLECTION(8, 0x01), /* Application */
-    HID_RI_REPORT_ID(8, REPORT_ID_SYSTEM),
-    HID_RI_LOGICAL_MINIMUM(16, 0x0001),
-    HID_RI_LOGICAL_MAXIMUM(16, 0x0037),
-    HID_RI_USAGE_MINIMUM(16, 0x0081), /* System Power Down */
-    HID_RI_USAGE_MAXIMUM(16, 0x00B7), /* System Display LCD Autoscale */
-    HID_RI_REPORT_SIZE(8, 16),
-    HID_RI_REPORT_COUNT(8, 1),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_ARRAY | HID_IOF_ABSOLUTE),
+        HID_RI_REPORT_ID(8, REPORT_ID_SYSTEM),
+        HID_RI_LOGICAL_MINIMUM(16, 0x0001),
+        HID_RI_LOGICAL_MAXIMUM(16, 0x0037),
+        HID_RI_USAGE_MINIMUM(16, 0x0081), /* System Power Down */
+        HID_RI_USAGE_MAXIMUM(16, 0x00B7), /* System Display LCD Autoscale */
+        HID_RI_REPORT_SIZE(8, 16),
+        HID_RI_REPORT_COUNT(8, 1),
+        HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_ARRAY | HID_IOF_ABSOLUTE),
     HID_RI_END_COLLECTION(0),
 
     HID_RI_USAGE_PAGE(8, 0x0C), /* Consumer */
-    HID_RI_USAGE(8, 0x01),      /* Consumer Control */
+    HID_RI_USAGE(8, 0x01), /* Consumer Control */
     HID_RI_COLLECTION(8, 0x01), /* Application */
-    HID_RI_REPORT_ID(8, REPORT_ID_CONSUMER),
-    HID_RI_LOGICAL_MINIMUM(16, 0x0001),
-    HID_RI_LOGICAL_MAXIMUM(16, 0x029C),
-    HID_RI_USAGE_MINIMUM(16, 0x0001), /* +10 */
-    HID_RI_USAGE_MAXIMUM(16, 0x029C), /* AC Distribute Vertically */
-    HID_RI_REPORT_SIZE(8, 16),
-    HID_RI_REPORT_COUNT(8, 1),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_ARRAY | HID_IOF_ABSOLUTE),
+        HID_RI_REPORT_ID(8, REPORT_ID_CONSUMER),
+        HID_RI_LOGICAL_MINIMUM(16, 0x0001),
+        HID_RI_LOGICAL_MAXIMUM(16, 0x029C),
+        HID_RI_USAGE_MINIMUM(16, 0x0001), /* +10 */
+        HID_RI_USAGE_MAXIMUM(16, 0x029C), /* AC Distribute Vertically */
+        HID_RI_REPORT_SIZE(8, 16),
+        HID_RI_REPORT_COUNT(8, 1),
+        HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_ARRAY | HID_IOF_ABSOLUTE),
     HID_RI_END_COLLECTION(0),
 #endif
 };
 #endif
 
 #ifdef CONSOLE_ENABLE
-const USB_Descriptor_HIDReport_Datatype_t PROGMEM ConsoleReport[] = {
+const USB_Descriptor_HIDReport_Datatype_t PROGMEM ConsoleReport[] =
+{
     HID_RI_USAGE_PAGE(16, 0xFF31), /* Vendor Page(PJRC Teensy compatible) */
-    HID_RI_USAGE(8, 0x74),         /* Vendor Usage(PJRC Teensy compatible) */
-    HID_RI_COLLECTION(8, 0x01),    /* Application */
-    HID_RI_USAGE(8, 0x75),         /* Vendor Usage 0x75 */
-    HID_RI_LOGICAL_MINIMUM(8, 0x00),
-    HID_RI_LOGICAL_MAXIMUM(16, 0x00FF),
-    HID_RI_REPORT_COUNT(8, CONSOLE_EPSIZE),
-    HID_RI_REPORT_SIZE(8, 0x08),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
-    HID_RI_USAGE(8, 0x76), /* Vendor Usage 0x76 */
-    HID_RI_LOGICAL_MINIMUM(8, 0x00),
-    HID_RI_LOGICAL_MAXIMUM(16, 0x00FF),
-    HID_RI_REPORT_COUNT(8, CONSOLE_EPSIZE),
-    HID_RI_REPORT_SIZE(8, 0x08),
-    HID_RI_OUTPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE | HID_IOF_NON_VOLATILE),
+    HID_RI_USAGE(8, 0x74), /* Vendor Usage(PJRC Teensy compatible) */
+    HID_RI_COLLECTION(8, 0x01), /* Application */
+        HID_RI_USAGE(8, 0x75), /* Vendor Usage 0x75 */
+        HID_RI_LOGICAL_MINIMUM(8, 0x00),
+        HID_RI_LOGICAL_MAXIMUM(16, 0x00FF),
+        HID_RI_REPORT_COUNT(8, CONSOLE_EPSIZE),
+        HID_RI_REPORT_SIZE(8, 0x08),
+        HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
+        HID_RI_USAGE(8, 0x76), /* Vendor Usage 0x76 */
+        HID_RI_LOGICAL_MINIMUM(8, 0x00),
+        HID_RI_LOGICAL_MAXIMUM(16, 0x00FF),
+        HID_RI_REPORT_COUNT(8, CONSOLE_EPSIZE),
+        HID_RI_REPORT_SIZE(8, 0x08),
+        HID_RI_OUTPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE | HID_IOF_NON_VOLATILE),
     HID_RI_END_COLLECTION(0),
 };
 #endif
 
 #if !defined(NO_KEYBOARD) && defined(NKRO_6KRO_ENABLE)
-const USB_Descriptor_HIDReport_Datatype_t PROGMEM NKROReport[] = {
-    HID_RI_USAGE_PAGE(8, 0x01),    /* Generic Desktop */
-    HID_RI_USAGE(8, 0x06),         /* Keyboard */
-    HID_RI_COLLECTION(8, 0x01),    /* Application */
-    HID_RI_USAGE_PAGE(8, 0x07),    /* Key Codes */
-    HID_RI_USAGE_MINIMUM(8, 0xE0), /* Keyboard Left Control */
-    HID_RI_USAGE_MAXIMUM(8, 0xE7), /* Keyboard Right GUI */
-    HID_RI_LOGICAL_MINIMUM(8, 0x00),
-    HID_RI_LOGICAL_MAXIMUM(8, 0x01),
-    HID_RI_REPORT_COUNT(8, 0x08),
-    HID_RI_REPORT_SIZE(8, 0x01),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
+const USB_Descriptor_HIDReport_Datatype_t PROGMEM NKROReport[] =
+{
+    HID_RI_USAGE_PAGE(8, 0x01), /* Generic Desktop */
+    HID_RI_USAGE(8, 0x06), /* Keyboard */
+    HID_RI_COLLECTION(8, 0x01), /* Application */
+        HID_RI_USAGE_PAGE(8, 0x07), /* Key Codes */
+        HID_RI_USAGE_MINIMUM(8, 0xE0), /* Keyboard Left Control */
+        HID_RI_USAGE_MAXIMUM(8, 0xE7), /* Keyboard Right GUI */
+        HID_RI_LOGICAL_MINIMUM(8, 0x00),
+        HID_RI_LOGICAL_MAXIMUM(8, 0x01),
+        HID_RI_REPORT_COUNT(8, 0x08),
+        HID_RI_REPORT_SIZE(8, 0x01),
+        HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
 
-    HID_RI_USAGE_PAGE(8, 0x08),    /* LEDs */
-    HID_RI_USAGE_MINIMUM(8, 0x01), /* Num Lock */
-    HID_RI_USAGE_MAXIMUM(8, 0x05), /* Kana */
-    HID_RI_REPORT_COUNT(8, 0x05),
-    HID_RI_REPORT_SIZE(8, 0x01),
-    HID_RI_OUTPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE | HID_IOF_NON_VOLATILE),
-    HID_RI_REPORT_COUNT(8, 0x01),
-    HID_RI_REPORT_SIZE(8, 0x03),
-    HID_RI_OUTPUT(8, HID_IOF_CONSTANT),
+        HID_RI_USAGE_PAGE(8, 0x08), /* LEDs */
+        HID_RI_USAGE_MINIMUM(8, 0x01), /* Num Lock */
+        HID_RI_USAGE_MAXIMUM(8, 0x05), /* Kana */
+        HID_RI_REPORT_COUNT(8, 0x05),
+        HID_RI_REPORT_SIZE(8, 0x01),
+        HID_RI_OUTPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE | HID_IOF_NON_VOLATILE),
+        HID_RI_REPORT_COUNT(8, 0x01),
+        HID_RI_REPORT_SIZE(8, 0x03),
+        HID_RI_OUTPUT(8, HID_IOF_CONSTANT),
 
-    HID_RI_USAGE_PAGE(8, 0x07),                         /* Key Codes */
-    HID_RI_USAGE_MINIMUM(8, 0x00),                      /* Keyboard 0 */
-    HID_RI_USAGE_MAXIMUM(8, (NKRO_EPSIZE - 1) * 8 - 1), /* Keyboard Right GUI */
-    HID_RI_LOGICAL_MINIMUM(8, 0x00),
-    HID_RI_LOGICAL_MAXIMUM(8, 0x01),
-    HID_RI_REPORT_COUNT(8, (NKRO_EPSIZE - 1) * 8),
-    HID_RI_REPORT_SIZE(8, 0x01),
-    HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
+        HID_RI_USAGE_PAGE(8, 0x07), /* Key Codes */
+        HID_RI_USAGE_MINIMUM(8, 0x00), /* Keyboard 0 */
+        HID_RI_USAGE_MAXIMUM(8, (NKRO_EPSIZE-1)*8-1), /* Keyboard Right GUI */
+        HID_RI_LOGICAL_MINIMUM(8, 0x00),
+        HID_RI_LOGICAL_MAXIMUM(8, 0x01),
+        HID_RI_REPORT_COUNT(8, (NKRO_EPSIZE-1)*8),
+        HID_RI_REPORT_SIZE(8, 0x01),
+        HID_RI_INPUT(8, HID_IOF_DATA | HID_IOF_VARIABLE | HID_IOF_ABSOLUTE),
     HID_RI_END_COLLECTION(0),
 };
 #endif
@@ -277,154 +282,184 @@ const USB_Descriptor_HIDReport_Datatype_t PROGMEM NKROReport[] = {
 /*******************************************************************************
  * Device Descriptors
  ******************************************************************************/
-const USB_Descriptor_Device_t PROGMEM DeviceDescriptor = {
-    .Header = {.Size = sizeof(USB_Descriptor_Device_t), .Type = DTYPE_Device},
+const USB_Descriptor_Device_t PROGMEM DeviceDescriptor =
+{
+    .Header                 = {.Size = sizeof(USB_Descriptor_Device_t), .Type = DTYPE_Device},
 
-    .USBSpecification = VERSION_BCD(1, 1, 0),
-    .Class = USB_CSCP_NoDeviceClass,
-    .SubClass = USB_CSCP_NoDeviceSubclass,
-    .Protocol = USB_CSCP_NoDeviceProtocol,
+    .USBSpecification       = VERSION_BCD(1,1,0),
+    .Class                  = USB_CSCP_NoDeviceClass,
+    .SubClass               = USB_CSCP_NoDeviceSubclass,
+    .Protocol               = USB_CSCP_NoDeviceProtocol,
 
-    .Endpoint0Size = FIXED_CONTROL_ENDPOINT_SIZE,
+    .Endpoint0Size          = FIXED_CONTROL_ENDPOINT_SIZE,
 
     /* specified in config.h */
-    .VendorID = VENDOR_ID,
-    .ProductID = PRODUCT_ID,
-    .ReleaseNumber = DEVICE_VER,
+    .VendorID               = VENDOR_ID,
+    .ProductID              = PRODUCT_ID,
+    .ReleaseNumber          = DEVICE_VER,
 
-    .ManufacturerStrIndex = 0x01,
-    .ProductStrIndex = 0x02,
-    .SerialNumStrIndex = NO_DESCRIPTOR,
+    .ManufacturerStrIndex   = 0x01,
+    .ProductStrIndex        = 0x02,
+    .SerialNumStrIndex      = NO_DESCRIPTOR,
 
-    .NumberOfConfigurations = FIXED_NUM_CONFIGURATIONS};
+    .NumberOfConfigurations = FIXED_NUM_CONFIGURATIONS
+};
 
 /*******************************************************************************
  * Configuration Descriptors
  ******************************************************************************/
-const USB_Descriptor_Configuration_t PROGMEM
-    ConfigurationDescriptor =
+const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor =
+{
+    .Config =
         {
-            .Config = {.Header = {.Size = sizeof(USB_Descriptor_Configuration_Header_t), .Type = DTYPE_Configuration},
+            .Header                 = {.Size = sizeof(USB_Descriptor_Configuration_Header_t), .Type = DTYPE_Configuration},
 
-                       .TotalConfigurationSize = sizeof(USB_Descriptor_Configuration_t),
-                       .TotalInterfaces = TOTAL_INTERFACES,
+            .TotalConfigurationSize = sizeof(USB_Descriptor_Configuration_t),
+            .TotalInterfaces        = TOTAL_INTERFACES,
 
-                       .ConfigurationNumber = 1,
-                       .ConfigurationStrIndex = NO_DESCRIPTOR,
+            .ConfigurationNumber    = 1,
+            .ConfigurationStrIndex  = NO_DESCRIPTOR,
 
-                       .ConfigAttributes = (USB_CONFIG_ATTR_RESERVED | USB_CONFIG_ATTR_REMOTEWAKEUP),
+            .ConfigAttributes       = (USB_CONFIG_ATTR_RESERVED | USB_CONFIG_ATTR_REMOTEWAKEUP),
 
-                       .MaxPowerConsumption = USB_CONFIG_POWER_MA(100)},
+            .MaxPowerConsumption    = USB_CONFIG_POWER_MA(100)
+        },
 
-/*
- * Keyboard
- */
+    /*
+     * Keyboard
+     */
 #ifndef NO_KEYBOARD
-            .Keyboard_Interface = {.Header = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
+    .Keyboard_Interface =
+        {
+            .Header                 = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
 
-                                   .InterfaceNumber = KEYBOARD_INTERFACE,
-                                   .AlternateSetting = 0x00,
+            .InterfaceNumber        = KEYBOARD_INTERFACE,
+            .AlternateSetting       = 0x00,
 
-                                   .TotalEndpoints = 1,
+            .TotalEndpoints         = 1,
 
-                                   .Class = HID_CSCP_HIDClass,
-                                   .SubClass = HID_CSCP_BootSubclass,
-                                   .Protocol = HID_CSCP_KeyboardBootProtocol,
+            .Class                  = HID_CSCP_HIDClass,
+            .SubClass               = HID_CSCP_BootSubclass,
+            .Protocol               = HID_CSCP_KeyboardBootProtocol,
 
-                                   .InterfaceStrIndex = NO_DESCRIPTOR},
+            .InterfaceStrIndex      = NO_DESCRIPTOR
+        },
 
-            .Keyboard_HID = {.Header = {.Size = sizeof(USB_HID_Descriptor_HID_t), .Type = HID_DTYPE_HID},
+    .Keyboard_HID =
+        {
+            .Header                 = {.Size = sizeof(USB_HID_Descriptor_HID_t), .Type = HID_DTYPE_HID},
 
-                             .HIDSpec = VERSION_BCD(1, 1, 1),
-                             .CountryCode = 0x00,
-                             .TotalReportDescriptors = 1,
-                             .HIDReportType = HID_DTYPE_Report,
-                             .HIDReportLength = sizeof(KeyboardReport)},
+            .HIDSpec                = VERSION_BCD(1,1,1),
+            .CountryCode            = 0x00,
+            .TotalReportDescriptors = 1,
+            .HIDReportType          = HID_DTYPE_Report,
+            .HIDReportLength        = sizeof(KeyboardReport)
+        },
 
-            .Keyboard_INEndpoint = {.Header = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
+    .Keyboard_INEndpoint =
+        {
+            .Header                 = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
 
-                                    .EndpointAddress = (ENDPOINT_DIR_IN | KEYBOARD_IN_EPNUM),
-                                    .Attributes = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
+            .EndpointAddress        = (ENDPOINT_DIR_IN | KEYBOARD_IN_EPNUM),
+            .Attributes             = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
 #ifdef NKRO_ENABLE
-                                    .EndpointSize = NKRO_EPSIZE,
-                                    .PollingIntervalMS = 0x01
+            .EndpointSize           = NKRO_EPSIZE,
+            .PollingIntervalMS      = 0x01
 #else
-                                    .EndpointSize = KEYBOARD_EPSIZE,
-                                    .PollingIntervalMS = 0x0A
+            .EndpointSize           = KEYBOARD_EPSIZE,
+            .PollingIntervalMS      = 0x0A
 #endif
-            },
+        },
 #endif
 
-/*
- * Mouse
- */
+    /*
+     * Mouse
+     */
 #if defined(MOUSE_ENABLE) || defined(EXTRAKEY_ENABLE)
-            .Mouse_Interface = {.Header = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
+    .Mouse_Interface =
+        {
+            .Header                 = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
 
-                                .InterfaceNumber = MOUSE_INTERFACE,
-                                .AlternateSetting = 0x00,
+            .InterfaceNumber        = MOUSE_INTERFACE,
+            .AlternateSetting       = 0x00,
 
-                                .TotalEndpoints = 1,
+            .TotalEndpoints         = 1,
 
-                                .Class = HID_CSCP_HIDClass,
+            .Class                  = HID_CSCP_HIDClass,
 #if defined(MOUSE_ENABLE)
-                                .SubClass = HID_CSCP_BootSubclass,
-                                .Protocol = HID_CSCP_MouseBootProtocol,
+            .SubClass               = HID_CSCP_BootSubclass,
+            .Protocol               = HID_CSCP_MouseBootProtocol,
 #else
-                                .SubClass = HID_CSCP_NonBootSubclass,
-                                .Protocol = HID_CSCP_NonBootProtocol,
+            .SubClass               = HID_CSCP_NonBootSubclass,
+            .Protocol               = HID_CSCP_NonBootProtocol,
 #endif
 
-                                .InterfaceStrIndex = NO_DESCRIPTOR},
+            .InterfaceStrIndex      = NO_DESCRIPTOR
+        },
 
-            .Mouse_HID = {.Header = {.Size = sizeof(USB_HID_Descriptor_HID_t), .Type = HID_DTYPE_HID},
+    .Mouse_HID =
+        {
+            .Header                 = {.Size = sizeof(USB_HID_Descriptor_HID_t), .Type = HID_DTYPE_HID},
 
-                          .HIDSpec = VERSION_BCD(1, 1, 1),
-                          .CountryCode = 0x00,
-                          .TotalReportDescriptors = 1,
-                          .HIDReportType = HID_DTYPE_Report,
-                          .HIDReportLength = sizeof(MouseReport)},
+            .HIDSpec                = VERSION_BCD(1,1,1),
+            .CountryCode            = 0x00,
+            .TotalReportDescriptors = 1,
+            .HIDReportType          = HID_DTYPE_Report,
+            .HIDReportLength        = sizeof(MouseReport)
+        },
 
-            .Mouse_INEndpoint = {.Header = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
+    .Mouse_INEndpoint =
+        {
+            .Header                 = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
 
-                                 .EndpointAddress = (ENDPOINT_DIR_IN | MOUSE_IN_EPNUM),
-                                 .Attributes = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
-                                 .EndpointSize = MOUSE_EPSIZE,
-                                 .PollingIntervalMS = 0x01},
+            .EndpointAddress        = (ENDPOINT_DIR_IN | MOUSE_IN_EPNUM),
+            .Attributes             = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
+            .EndpointSize           = MOUSE_EPSIZE,
+            .PollingIntervalMS      = 0x01
+        },
 #endif
 
-/*
- * Console
- */
+    /*
+     * Console
+     */
 #ifdef CONSOLE_ENABLE
-            .Console_Interface = {.Header = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
+    .Console_Interface =
+        {
+            .Header                 = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
 
-                                  .InterfaceNumber = CONSOLE_INTERFACE,
-                                  .AlternateSetting = 0x00,
+            .InterfaceNumber        = CONSOLE_INTERFACE,
+            .AlternateSetting       = 0x00,
 
-                                  //.TotalEndpoints         = 2,
-                                  .TotalEndpoints = 1,
+            //.TotalEndpoints         = 2,
+            .TotalEndpoints         = 1,
 
-                                  .Class = HID_CSCP_HIDClass,
-                                  .SubClass = HID_CSCP_NonBootSubclass,
-                                  .Protocol = HID_CSCP_NonBootProtocol,
+            .Class                  = HID_CSCP_HIDClass,
+            .SubClass               = HID_CSCP_NonBootSubclass,
+            .Protocol               = HID_CSCP_NonBootProtocol,
 
-                                  .InterfaceStrIndex = NO_DESCRIPTOR},
+            .InterfaceStrIndex      = NO_DESCRIPTOR
+        },
 
-            .Console_HID = {.Header = {.Size = sizeof(USB_HID_Descriptor_HID_t), .Type = HID_DTYPE_HID},
+    .Console_HID =
+        {
+            .Header                 = {.Size = sizeof(USB_HID_Descriptor_HID_t), .Type = HID_DTYPE_HID},
 
-                            .HIDSpec = VERSION_BCD(1, 1, 1),
-                            .CountryCode = 0x00,
-                            .TotalReportDescriptors = 1,
-                            .HIDReportType = HID_DTYPE_Report,
-                            .HIDReportLength = sizeof(ConsoleReport)},
+            .HIDSpec                = VERSION_BCD(1,1,1),
+            .CountryCode            = 0x00,
+            .TotalReportDescriptors = 1,
+            .HIDReportType          = HID_DTYPE_Report,
+            .HIDReportLength        = sizeof(ConsoleReport)
+        },
 
-            .Console_INEndpoint = {.Header = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
+    .Console_INEndpoint =
+        {
+            .Header                 = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
 
-                                   .EndpointAddress = (ENDPOINT_DIR_IN | CONSOLE_IN_EPNUM),
-                                   .Attributes = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
-                                   .EndpointSize = CONSOLE_EPSIZE,
-                                   .PollingIntervalMS = 0x01},
+            .EndpointAddress        = (ENDPOINT_DIR_IN | CONSOLE_IN_EPNUM),
+            .Attributes             = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
+            .EndpointSize           = CONSOLE_EPSIZE,
+            .PollingIntervalMS      = 0x01
+        },
 
 /*
     .Console_OUTEndpoint =
@@ -439,85 +474,104 @@ const USB_Descriptor_Configuration_t PROGMEM
 */
 #endif
 
-/*
- * NKRO
- */
+    /*
+     * NKRO
+     */
 #if !defined(NO_KEYBOARD) && defined(NKRO_6KRO_ENABLE)
-            .NKRO_Interface = {.Header = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
+    .NKRO_Interface =
+        {
+            .Header                 = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
 
-                               .InterfaceNumber = NKRO_INTERFACE,
-                               .AlternateSetting = 0x00,
+            .InterfaceNumber        = NKRO_INTERFACE,
+            .AlternateSetting       = 0x00,
 
-                               .TotalEndpoints = 1,
+            .TotalEndpoints         = 1,
 
-                               .Class = HID_CSCP_HIDClass,
-                               .SubClass = HID_CSCP_NonBootSubclass,
-                               .Protocol = HID_CSCP_NonBootProtocol,
+            .Class                  = HID_CSCP_HIDClass,
+            .SubClass               = HID_CSCP_NonBootSubclass,
+            .Protocol               = HID_CSCP_NonBootProtocol,
 
-                               .InterfaceStrIndex = NO_DESCRIPTOR},
+            .InterfaceStrIndex      = NO_DESCRIPTOR
+        },
 
-            .NKRO_HID = {.Header = {.Size = sizeof(USB_HID_Descriptor_HID_t), .Type = HID_DTYPE_HID},
+    .NKRO_HID =
+        {
+            .Header                 = {.Size = sizeof(USB_HID_Descriptor_HID_t), .Type = HID_DTYPE_HID},
 
-                         .HIDSpec = VERSION_BCD(1, 1, 1),
-                         .CountryCode = 0x00,
-                         .TotalReportDescriptors = 1,
-                         .HIDReportType = HID_DTYPE_Report,
-                         .HIDReportLength = sizeof(NKROReport)},
+            .HIDSpec                = VERSION_BCD(1,1,1),
+            .CountryCode            = 0x00,
+            .TotalReportDescriptors = 1,
+            .HIDReportType          = HID_DTYPE_Report,
+            .HIDReportLength        = sizeof(NKROReport)
+        },
 
-            .NKRO_INEndpoint = {.Header = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
+    .NKRO_INEndpoint =
+        {
+            .Header                 = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
 
-                                .EndpointAddress = (ENDPOINT_DIR_IN | NKRO_IN_EPNUM),
-                                .Attributes = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
-                                .EndpointSize = NKRO_EPSIZE,
-                                .PollingIntervalMS = 0x01},
+            .EndpointAddress        = (ENDPOINT_DIR_IN | NKRO_IN_EPNUM),
+            .Attributes             = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
+            .EndpointSize           = NKRO_EPSIZE,
+            .PollingIntervalMS      = 0x01
+        },
 #endif
 
 #ifdef VFD_ENABLE
-            .VFD_Interface =
-                {
-                    .Header = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
+    .VFD_Interface =
+        {
+            .Header                 = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
 
-                    .InterfaceNumber = VFD_INTERFACE,
-                    .AlternateSetting = 0x00,
+            .InterfaceNumber        = VFD_INTERFACE,
+            .AlternateSetting       = 0x00,
 
-                    .TotalEndpoints = 1,
+            .TotalEndpoints         = 1,
 
-                    .Class = USB_CSCP_NoDeviceClass,
-                    .SubClass = USB_CSCP_NoDeviceSubclass,
-                    .Protocol = USB_CSCP_NoDeviceProtocol,
+            .Class                  = USB_CSCP_NoDeviceClass,
+            .SubClass               = USB_CSCP_NoDeviceSubclass,
+            .Protocol               = USB_CSCP_NoDeviceProtocol,
 
-                    .InterfaceStrIndex = NO_DESCRIPTOR,
-                },
+            .InterfaceStrIndex      = NO_DESCRIPTOR,
+        },
 
-            // out == host-to-device
-            .VFD_OutEndpoint = {.Header = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
+    .VFD_OutEndpoint = 
+        {
+            .Header                 = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
 
-                                .EndpointAddress = (ENDPOINT_DIR_OUT | VFD_OUT_EPNUM),
-                                .Attributes = (EP_TYPE_BULK | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
-
-                                .EndpointSize = 64,
-                                .PollingIntervalMS = 0x05},
+            .EndpointAddress        = (ENDPOINT_DIR_OUT | VFD_OUT_EPNUM),
+            .Attributes             = (EP_TYPE_BULK | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
+            .EndpointSize           = 64,
+            .PollingIntervalMS      = 0x05
+        },
 #endif
 };
+
 
 /*******************************************************************************
  * String Descriptors
  ******************************************************************************/
-const USB_Descriptor_String_t PROGMEM LanguageString = {.Header = {.Size = USB_STRING_LEN(1), .Type = DTYPE_String},
+const USB_Descriptor_String_t PROGMEM LanguageString =
+{
+    .Header                 = {.Size = USB_STRING_LEN(1), .Type = DTYPE_String},
 
-                                                        .UnicodeString = {LANGUAGE_ID_ENG}};
+    .UnicodeString          = {LANGUAGE_ID_ENG}
+};
 
-const USB_Descriptor_String_t PROGMEM ManufacturerString = {
+const USB_Descriptor_String_t PROGMEM ManufacturerString =
+{
     /* subtract 1 for null terminator */
-    .Header = {.Size = USB_STRING_LEN(sizeof(STR(MANUFACTURER)) - 1), .Type = DTYPE_String},
+    .Header                 = {.Size = USB_STRING_LEN(sizeof(STR(MANUFACTURER))-1), .Type = DTYPE_String},
 
-    .UnicodeString = LSTR(MANUFACTURER)};
+    .UnicodeString          = LSTR(MANUFACTURER)
+};
 
-const USB_Descriptor_String_t PROGMEM ProductString = {
+const USB_Descriptor_String_t PROGMEM ProductString =
+{
     /* subtract 1 for null terminator */
-    .Header = {.Size = USB_STRING_LEN(sizeof(STR(PRODUCT)) - 1), .Type = DTYPE_String},
+    .Header                 = {.Size = USB_STRING_LEN(sizeof(STR(PRODUCT))-1), .Type = DTYPE_String},
 
-    .UnicodeString = LSTR(PRODUCT)};
+    .UnicodeString          = LSTR(PRODUCT)
+};
+
 
 /** This function is called by the library when in device mode, and must be overridden (see library "USB Descriptors"
  *  documentation) by the application code so that the address and size of a requested descriptor can be given
@@ -525,97 +579,101 @@ const USB_Descriptor_String_t PROGMEM ProductString = {
  *  is called so that the descriptor details can be passed back and the appropriate descriptor sent back to the
  *  USB host.
  */
-uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue, const uint16_t wIndex,
-                                    const void **const DescriptorAddress) {
-  const uint8_t DescriptorType = (wValue >> 8);
-  const uint8_t DescriptorIndex = (wValue & 0xFF);
+uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
+                                    const uint16_t wIndex,
+                                    const void** const DescriptorAddress)
+{
+    const uint8_t  DescriptorType   = (wValue >> 8);
+    const uint8_t  DescriptorIndex  = (wValue & 0xFF);
 
-  const void *Address = NULL;
-  uint16_t Size = NO_DESCRIPTOR;
+    const void* Address = NULL;
+    uint16_t    Size    = NO_DESCRIPTOR;
 
-  switch (DescriptorType) {
-    case DTYPE_Device:
-      Address = &DeviceDescriptor;
-      Size = sizeof(USB_Descriptor_Device_t);
-      break;
-    case DTYPE_Configuration:
-      Address = &ConfigurationDescriptor;
-      Size = sizeof(USB_Descriptor_Configuration_t);
-      break;
-    case DTYPE_String:
-      switch (DescriptorIndex) {
-        case 0x00:
-          Address = &LanguageString;
-          Size = pgm_read_byte(&LanguageString.Header.Size);
-          break;
-        case 0x01:
-          Address = &ManufacturerString;
-          Size = pgm_read_byte(&ManufacturerString.Header.Size);
-          break;
-        case 0x02:
-          Address = &ProductString;
-          Size = pgm_read_byte(&ProductString.Header.Size);
-          break;
-      }
-      break;
-    case HID_DTYPE_HID:
-      switch (wIndex) {
+    switch (DescriptorType)
+    {
+        case DTYPE_Device:
+            Address = &DeviceDescriptor;
+            Size    = sizeof(USB_Descriptor_Device_t);
+            break;
+        case DTYPE_Configuration:
+            Address = &ConfigurationDescriptor;
+            Size    = sizeof(USB_Descriptor_Configuration_t);
+            break;
+        case DTYPE_String:
+            switch (DescriptorIndex )
+            {
+                case 0x00:
+                    Address = &LanguageString;
+                    Size    = pgm_read_byte(&LanguageString.Header.Size);
+                    break;
+                case 0x01:
+                    Address = &ManufacturerString;
+                    Size    = pgm_read_byte(&ManufacturerString.Header.Size);
+                    break;
+                case 0x02:
+                    Address = &ProductString;
+                    Size    = pgm_read_byte(&ProductString.Header.Size);
+                    break;
+            }
+            break;
+        case HID_DTYPE_HID:
+            switch (wIndex) {
 #ifndef NO_KEYBOARD
-        case KEYBOARD_INTERFACE:
-          Address = &ConfigurationDescriptor.Keyboard_HID;
-          Size = sizeof(USB_HID_Descriptor_HID_t);
-          break;
+            case KEYBOARD_INTERFACE:
+                Address = &ConfigurationDescriptor.Keyboard_HID;
+                Size    = sizeof(USB_HID_Descriptor_HID_t);
+                break;
 #endif
 #if defined(MOUSE_ENABLE) || defined(EXTRAKEY_ENABLE)
-        case MOUSE_INTERFACE:
-          Address = &ConfigurationDescriptor.Mouse_HID;
-          Size = sizeof(USB_HID_Descriptor_HID_t);
-          break;
+            case MOUSE_INTERFACE:
+                Address = &ConfigurationDescriptor.Mouse_HID;
+                Size    = sizeof(USB_HID_Descriptor_HID_t);
+                break;
 #endif
 #ifdef CONSOLE_ENABLE
-        case CONSOLE_INTERFACE:
-          Address = &ConfigurationDescriptor.Console_HID;
-          Size = sizeof(USB_HID_Descriptor_HID_t);
-          break;
+            case CONSOLE_INTERFACE:
+                Address = &ConfigurationDescriptor.Console_HID;
+                Size    = sizeof(USB_HID_Descriptor_HID_t);
+                break;
 #endif
 #if !defined(NO_KEYBOARD) && defined(NKRO_6KRO_ENABLE)
-        case NKRO_INTERFACE:
-          Address = &ConfigurationDescriptor.NKRO_HID;
-          Size = sizeof(USB_HID_Descriptor_HID_t);
-          break;
+            case NKRO_INTERFACE:
+                Address = &ConfigurationDescriptor.NKRO_HID;
+                Size    = sizeof(USB_HID_Descriptor_HID_t);
+                break;
 #endif
-      }
-      break;
-    case HID_DTYPE_Report:
-      switch (wIndex) {
+            }
+            break;
+        case HID_DTYPE_Report:
+            switch (wIndex) {
 #ifndef NO_KEYBOARD
-        case KEYBOARD_INTERFACE:
-          Address = &KeyboardReport;
-          Size = sizeof(KeyboardReport);
-          break;
+            case KEYBOARD_INTERFACE:
+                Address = &KeyboardReport;
+                Size    = sizeof(KeyboardReport);
+                break;
 #endif
 #if defined(MOUSE_ENABLE) || defined(EXTRAKEY_ENABLE)
-        case MOUSE_INTERFACE:
-          Address = &MouseReport;
-          Size = sizeof(MouseReport);
-          break;
+            case MOUSE_INTERFACE:
+                Address = &MouseReport;
+                Size    = sizeof(MouseReport);
+                break;
 #endif
 #ifdef CONSOLE_ENABLE
-        case CONSOLE_INTERFACE:
-          Address = &ConsoleReport;
-          Size = sizeof(ConsoleReport);
-          break;
+            case CONSOLE_INTERFACE:
+                Address = &ConsoleReport;
+                Size    = sizeof(ConsoleReport);
+                break;
 #endif
 #if !defined(NO_KEYBOARD) && defined(NKRO_6KRO_ENABLE)
-        case NKRO_INTERFACE:
-          Address = &NKROReport;
-          Size = sizeof(NKROReport);
-          break;
+            case NKRO_INTERFACE:
+                Address = &NKROReport;
+                Size    = sizeof(NKROReport);
+                break;
 #endif
-      }
-      break;
-  }
+            }
+            break;
+    }
 
-  *DescriptorAddress = Address;
-  return Size;
+    *DescriptorAddress = Address;
+    return Size;
 }

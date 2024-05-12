@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2012,2013 Jun Wako <wakojun@gmail.com>
  * This file is based on:
  *     LUFA-120219/Demos/Device/Lowlevel/KeyboardMouse
@@ -47,137 +47,143 @@
 #include <LUFA/Drivers/USB/USB.h>
 #include <avr/pgmspace.h>
 
-typedef struct {
-  USB_Descriptor_Configuration_Header_t Config;
+
+typedef struct
+{
+    USB_Descriptor_Configuration_Header_t Config;
 
 #ifndef NO_KEYBOARD
-  // Keyboard HID Interface
-  USB_Descriptor_Interface_t Keyboard_Interface;
-  USB_HID_Descriptor_HID_t Keyboard_HID;
-  USB_Descriptor_Endpoint_t Keyboard_INEndpoint;
+    // Keyboard HID Interface
+    USB_Descriptor_Interface_t            Keyboard_Interface;
+    USB_HID_Descriptor_HID_t              Keyboard_HID;
+    USB_Descriptor_Endpoint_t             Keyboard_INEndpoint;
 #endif
 
 #if defined(MOUSE_ENABLE) || defined(EXTRAKEY_ENABLE)
-  // Mouse HID Interface
-  USB_Descriptor_Interface_t Mouse_Interface;
-  USB_HID_Descriptor_HID_t Mouse_HID;
-  USB_Descriptor_Endpoint_t Mouse_INEndpoint;
+    // Mouse HID Interface
+    USB_Descriptor_Interface_t            Mouse_Interface;
+    USB_HID_Descriptor_HID_t              Mouse_HID;
+    USB_Descriptor_Endpoint_t             Mouse_INEndpoint;
 #endif
 
 #ifdef CONSOLE_ENABLE
-  // Console HID Interface
-  USB_Descriptor_Interface_t Console_Interface;
-  USB_HID_Descriptor_HID_t Console_HID;
-  USB_Descriptor_Endpoint_t Console_INEndpoint;
+    // Console HID Interface
+    USB_Descriptor_Interface_t            Console_Interface;
+    USB_HID_Descriptor_HID_t              Console_HID;
+    USB_Descriptor_Endpoint_t             Console_INEndpoint;
 //    USB_Descriptor_Endpoint_t             Console_OUTEndpoint;
 #endif
 
 #if !defined(NO_KEYBOARD) && defined(NKRO_6KRO_ENABLE)
-  // NKRO HID Interface
-  USB_Descriptor_Interface_t NKRO_Interface;
-  USB_HID_Descriptor_HID_t NKRO_HID;
-  USB_Descriptor_Endpoint_t NKRO_INEndpoint;
+    // NKRO HID Interface
+    USB_Descriptor_Interface_t            NKRO_Interface;
+    USB_HID_Descriptor_HID_t              NKRO_HID;
+    USB_Descriptor_Endpoint_t             NKRO_INEndpoint;
 #endif
 
 #ifdef VFD_ENABLE
-  USB_Descriptor_Interface_t VFD_Interface;
-  USB_Descriptor_Endpoint_t VFD_OutEndpoint;
+    USB_Descriptor_Interface_t            VFD_Interface;
+    USB_Descriptor_Endpoint_t             VFD_OutEndpoint;
 #endif
-
 } USB_Descriptor_Configuration_t;
+
 
 /* index of interface */
 #ifndef NO_KEYBOARD
-#define KEYBOARD_INTERFACE 0
+#   define KEYBOARD_INTERFACE          0
 #else
-#define KEYBOARD_INTERFACE -1
+#   define KEYBOARD_INTERFACE          -1
 #endif
 
 #if defined(MOUSE_ENABLE) || defined(EXTRAKEY_ENABLE)
-#define MOUSE_INTERFACE (KEYBOARD_INTERFACE + 1)
+#   define MOUSE_INTERFACE          (KEYBOARD_INTERFACE + 1)
 #else
-#define MOUSE_INTERFACE KEYBOARD_INTERFACE
-#endif
+#   define MOUSE_INTERFACE          KEYBOARD_INTERFACE
+#endif 
 
 #ifdef CONSOLE_ENABLE
-#define CONSOLE_INTERFACE (MOUSE_INTERFACE + 1)
+#   define CONSOLE_INTERFACE        (MOUSE_INTERFACE + 1)
 #else
-#define CONSOLE_INTERFACE MOUSE_INTERFACE
+#   define CONSOLE_INTERFACE        MOUSE_INTERFACE
 #endif
 
 #if !defined(NO_KEYBOARD) && defined(NKRO_6KRO_ENABLE)
-#define NKRO_INTERFACE (CONSOLE_INTERFACE + 1)
+#   define NKRO_INTERFACE           (CONSOLE_INTERFACE + 1)
 #else
-#define NKRO_INTERFACE CONSOLE_INTERFACE
+#   define NKRO_INTERFACE           CONSOLE_INTERFACE
 #endif
 
 #ifdef VFD_ENABLE
-#define VFD_INTERFACE (NKRO_INTERFACE + 1)
+#define VFD_INTERFACE               (NKRO_INTERFACE + 1)
 #else
-#define VFD_INTERFACE NKRO_INTERFACE
+#define VFD_INTERFACE               NKRO_INTERFACE
 #endif
 
+
 /* number of interfaces */
-#define TOTAL_INTERFACES (VFD_INTERFACE + 1)
+#define TOTAL_INTERFACES            (VFD_INTERFACE + 1)
+
 
 // Endpoint number and size
 #ifndef NO_KEYBOARD
-#define KEYBOARD_IN_EPNUM 1
+#   define KEYBOARD_IN_EPNUM           1
 #else
-#define KEYBOARD_IN_EPNUM 0
+#   define KEYBOARD_IN_EPNUM           0
 #endif
 
 #if defined(MOUSE_ENABLE) || defined(EXTRAKEY_ENABLE)
-#define MOUSE_IN_EPNUM (KEYBOARD_IN_EPNUM + 1)
+#   define MOUSE_IN_EPNUM           (KEYBOARD_IN_EPNUM + 1) 
 #else
-#define MOUSE_IN_EPNUM KEYBOARD_IN_EPNUM
+#   define MOUSE_IN_EPNUM           KEYBOARD_IN_EPNUM
 #endif
 
 #ifdef CONSOLE_ENABLE
-// ATMega32U2 doesn't support double bank on endpoint 1 and 2, use 3 or 4
-#if MOUSE_IN_EPNUM < 2
-#define CONSOLE_IN_EPNUM 3
-#define CONSOLE_OUT_EPNUM 3
+    // ATMega32U2 doesn't support double bank on endpoint 1 and 2, use 3 or 4
+#   if MOUSE_IN_EPNUM < 2
+#       define CONSOLE_IN_EPNUM     3
+#       define CONSOLE_OUT_EPNUM    3
+#   else
+#       define CONSOLE_IN_EPNUM     (MOUSE_IN_EPNUM + 1)
+#       define CONSOLE_OUT_EPNUM    (MOUSE_IN_EPNUM + 1)
+#   endif
 #else
-#define CONSOLE_IN_EPNUM (MOUSE_IN_EPNUM + 1)
-#define CONSOLE_OUT_EPNUM (MOUSE_IN_EPNUM + 1)
-#endif
-#else
-#define CONSOLE_OUT_EPNUM MOUSE_IN_EPNUM
+#   define CONSOLE_OUT_EPNUM        MOUSE_IN_EPNUM
 #endif
 
 #if !defined(NO_KEYBOARD) && defined(NKRO_6KRO_ENABLE)
-#define NKRO_IN_EPNUM (CONSOLE_OUT_EPNUM + 1)
+#   define NKRO_IN_EPNUM            (CONSOLE_OUT_EPNUM + 1)
 #else
-#define NKRO_IN_EPNUM CONSOLE_OUT_EPNUM
+#   define NKRO_IN_EPNUM            CONSOLE_OUT_EPNUM
 #endif
 
 #ifdef VFD_ENABLE
-#define VFD_OUT_EPNUM (NKRO_IN_EPNUM + 1)
+#   define VFD_OUT_EPNUM            (NKRO_IN_EPNUM + 1)
 #else
-#define VFD_OUT_EPNUM NKRO_IN_EPNUM
+#   define VFD_OUT_EPNUM            NKRO_IN_EPNUM
 #endif
 
 /* Check number of endpoints. ATmega32u2 has only four except for control endpoint. */
 #if defined(__AVR_ATmega32U2__) && VFD_OUT_EPNUM > 4
-#error                                                                                                                 \
-    "Not enough endpoints available to support all functions. Disable some build options in Makefile (MOUSEKEY, CONSOLE, NKRO)"
+#   error "Not enough endpoints available to support all functions. Disable some build options in Makefile (MOUSEKEY, CONSOLE, NKRO)"
 #endif
 
-#define KEYBOARD_EPSIZE 8
+
+#define KEYBOARD_EPSIZE             8
 
 #if defined(MOUSE_EXT_REPORT)
-#define MOUSE_EPSIZE 10
+#define MOUSE_EPSIZE                10
 #else
-#define MOUSE_EPSIZE 8
+#define MOUSE_EPSIZE                8
 #endif
 
-#define CONSOLE_EPSIZE 32
-#define NKRO_EPSIZE 32
-#define VFD_EPSIZE 64
+#define CONSOLE_EPSIZE              32
+#define NKRO_EPSIZE                 32
+#define VFD_EPSIZE                  64
 
-uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue, const uint16_t wIndex,
-                                    const void **const DescriptorAddress) ATTR_WARN_UNUSED_RESULT
-    ATTR_NON_NULL_PTR_ARG(3);
+
+uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
+                                    const uint16_t wIndex,
+                                    const void** const DescriptorAddress)
+                                    ATTR_WARN_UNUSED_RESULT ATTR_NON_NULL_PTR_ARG(3);
 
 #endif
