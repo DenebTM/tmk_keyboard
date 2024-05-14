@@ -22,18 +22,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VENDOR_ID       0xFEED
 #define PRODUCT_ID      0x6535
 #define DEVICE_VER      0x0100
-#define MANUFACTURER    t.m.k.
-#define PRODUCT         PS/2(Set3)-USB Keyboard converter(IBM 122keys)
-#define DESCRIPTION     USB converter for IBM Terminal Keyboard 122keys
+#define MANUFACTURER    TMK
+#define PRODUCT         IBM Model M (Terminal 122-key)
+#define DESCRIPTION     https://github.com/DenebTM/tmk_keyboard
 
 
 /* matrix size */
 #define MATRIX_ROWS 17  // keycode bit: 7-3
 #define MATRIX_COLS 8   // keycode bit: 2-0
-
-
-/* legacy keymap support */
-#define USE_LEGACY_KEYMAP
 
 
 /* key combination for command */

@@ -93,36 +93,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     { KC_NO,    KC_NO,    KC_NO,    KC_NO   , KC_##K84, KC_NO,    KC_NO,    KC_NO,   }, \
 }
 
-// Assign Fn key(0-7) to a layer to which switch with the Fn key pressed.
-const uint8_t PROGMEM fn_layer[] = {
-    0,              // Fn0
-    0,              // Fn1
-    0,              // Fn2
-    0,              // Fn3
-    0,              // Fn4
-    0,              // Fn5
-    0,              // Fn6
-    0               // Fn7
-};
-
-// Assign Fn key(0-7) to a keycode sent when release Fn key without use of the layer.
-// See layer.c for details.
-const uint8_t PROGMEM fn_keycode[] = {
-    KC_NO,          // Fn0
-    KC_NO,          // Fn1
-    KC_NO,          // Fn2
-    KC_NO,          // Fn3
-    KC_NO,          // Fn4
-    KC_NO,          // Fn5
-    KC_NO,          // Fn6
-    KC_NO           // Fn7
+const action_t PROGMEM fn_actions[] = {
+    /* F13 */ [0] = ACTION_KEY(MOD_LGUI | MOD_LSFT | KC_S),
+    /* F14 */ [1] = ACTION_KEY(MOD_LGUI | KC_R),
+    /* F15 */ [2] = ACTION_KEY(MOD_LGUI | KC_V),
 };
 
 
 const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
      *               ,-----------------------------------------------.
-     *               |F13|F14|F15|F16|F17|F18|F19|F20|F21|PrS|ScL|Pau|
+     *               |FN0|FN1|FN2|F16|F17|F18|F19|F20|F21|PrS|ScL|Pau|
      *               `-----------------------------------------------'
      *               ,-----------------------------------------------.
      *               |F1 |F2 |F3 |F4 |F5 |F6 |F7 |F8 |F9 |F10|F11|F12|
@@ -140,7 +121,7 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-------' `----'    `---------------------------------------'    `----'     `---'     `---------------'
      */
     KEYMAP(
-                     F13, F14, F15, F16, F17, F18, F19, F20, F21, PSCR,SLCK,PAUS,
+                    FN0, FN1, FN2, F16, F17, F18, F19, F20, F21, PSCR,SLCK,PAUS,
                      F1,  F2,  F3,  F4,  F5,  F6,  F7,  F8,  F9,  F10, F11, F12,
 
     ESC, RGUI,  GRV, 1,   2,   3,   4,   5,   6,   7,   8,   9,   0,   MINS,EQL, JYEN,BSPC,  INS, HOME,PGUP,  NLCK,PSLS,PAST,PMNS,
