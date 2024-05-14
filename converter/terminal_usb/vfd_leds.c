@@ -2,7 +2,8 @@
 
 #include "hook.h"
 #include "host.h"
-#include "led.h"
+#include "matrix.h"
+#include "suspend.h"
 
 #include "hd44780/hd44780.h"
 #include "vfd_leds.h"
@@ -48,8 +49,26 @@ void update_led_row(uint8_t led_status) {
 
 void hook_keyboard_leds_change(uint8_t led_status) { update_led_row(led_status); }
 
-void hook_usb_suspend_entry() { hd44780_command(HD44780_DISPLAYCONTROL | HD44780_DISPLAYOFF); }
-void hook_usb_wakeup() { hd44780_command(HD44780_DISPLAYCONTROL | HD44780_DISPLAYON); }
+static uint8_t keyboard_led_stats;
+static uint8_t _led_stats;
+
+void hook_usb_suspend_entry(void) {
+  _led_stats = keyboard_led_stats;
+  keyboard_led_stats = 0;
+
+  matrix_clear();
+  clear_keyboard();
+
+  hd44780_command(HD44780_DISPLAYCONTROL | HD44780_DISPLAYOFF);
+}
+
+void hook_usb_wakeup(void) {
+  suspend_wakeup_init();
+
+  keyboard_led_stats = _led_stats;
+
+  hd44780_command(HD44780_DISPLAYCONTROL | HD44780_DISPLAYON);
+}
 
 // TODO: this doesn't work
 // void hook_usb_reset() {
