@@ -59,7 +59,8 @@ F_USB = $(F_CPU)
 #   Atmel DFU loader 4096
 #   LUFA bootloader  4096
 OPT_DEFS += -DBOOTLOADER_SIZE=4096
-OPT_DEFS += -DSUSPEND_MODE_STANDBY # fix sleep issues
+#OPT_DEFS += -DSUSPEND_MODE_STANDBY # fix sleep issues
+OPT_DEFS += -DSUSPEND_MODE_IDLE    # fix sleep issues
 OPT_DEFS += -DVFD_ENABLE # 16x2 HD44780-compatible VFD
 
 
@@ -78,8 +79,8 @@ EXTRAKEY_ENABLE = yes	# Audio control and System control(+450)
 #
 # PS/2 protocol implementations
 #
-#PS2_USE_USART = yes	# uses hardware USART engine for PS/2 signal receive
-PS2_USE_INT = yes	# uses external interrupt for falling edge of PS/2 clock pin
+PS2_USE_USART = yes	# uses hardware USART engine for PS/2 signal receive
+#PS2_USE_INT = yes	# uses external interrupt for falling edge of PS/2 clock pin
 #PS2_USE_BUSYWAIT = yes	# uses primitive reference code
 
 
