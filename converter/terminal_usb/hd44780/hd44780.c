@@ -1,4 +1,5 @@
 #include "hd44780.h"
+#include "timer.h"
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -14,6 +15,8 @@ bool update_cursor = true;
 uint8_t cursor_x = 0;
 uint8_t cursor_y = 0;
 
+bool hd44780_initialized = false;
+
 void function_set(uint8_t brightness) {
   hd44780_command(HD44780_FUNCTIONSET | HD44780_8BITMODE | HD44780_2LINE | HD44780_5x8DOTS | brightness);
   _delay_ms(4.5);
@@ -21,14 +24,20 @@ void function_set(uint8_t brightness) {
 
 void hd44780_init() {
   // set control pins as output
-  HD44780_CTRL_DDR |= HD44780_RS | HD44780_RW | HD44780_EN;
+  HD44780_CTRL_DDR |= _BV(HD44780_RS) | _BV(HD44780_RW) | _BV(HD44780_EN);
 
   // set data pins as output
+  HD44780_DATA_OUT = 0xff;
   HD44780_DATA_DDR = 0xff;
 
   // initialize control lines and output
-  HD44780_CTRL &= ~(HD44780_RS | HD44780_RW | HD44780_EN);
-  HD44780_DATA = 0x00;
+  HD44780_CTRL &= ~(_BV(HD44780_RS) | _BV(HD44780_RW) | _BV(HD44780_EN));
+  HD44780_DATA_OUT = 0x00;
+
+  // turn off output comparators 0A and 1C, as they override PORTB7 input
+  // (LCD/VFD "Busy" pin)
+  TCCR0A &= ~(_BV(COM0A1) | _BV(COM0A0));
+  TCCR1A &= ~(_BV(COM1C0) | _BV(COM1C1));
 
   // wait for voltage to settle (TODO check how long this actually needs to be)
   _delay_ms(50);
@@ -41,24 +50,48 @@ void hd44780_init() {
   update_cursor = true;
   cursor_x = 0;
   cursor_y = 0;
+  hd44780_initialized = true;
 }
 
 void hd44780_send(uint8_t data, bool rs) {
-  HD44780_CTRL &= ~HD44780_RS;
-  HD44780_CTRL |= rs * HD44780_RS;
+  // wait until not busy
+  if (hd44780_initialized) {
+    // set data register as input
+    HD44780_DATA_DDR = 0;
+    HD44780_DATA_IN = 0xff;
 
-  HD44780_CTRL &= ~HD44780_RW;
+    HD44780_CTRL &= ~(_BV(HD44780_RS) | _BV(HD44780_EN));
+    HD44780_CTRL |= _BV(HD44780_RW);
 
-  HD44780_DATA = data;
+    uint16_t timeout_start = timer_read();
+    static bool timeout = false;
+    bool busy = true;
+
+    while (busy && !timeout) {
+      HD44780_CTRL |= _BV(HD44780_EN);
+      _delay_us(0.5);
+
+      busy = HD44780_DATA_IN >> 7;
+
+      HD44780_CTRL &= ~_BV(HD44780_EN);
+      _delay_us(0.5);
+
+      timeout = (timer_read() - timeout_start) >= 10000;
+    }
+  }
+
+  // setup for data write
+  HD44780_DATA_DDR = 0xff;
+  HD44780_CTRL &= ~(_BV(HD44780_RS) | _BV(HD44780_RW));
+  HD44780_CTRL |= (rs * _BV(HD44780_RS));
+
+  HD44780_DATA_OUT = data;
 
   // pulse enable pin
-  // casually doing this ~100x faster than the spec claims is allowed
-  HD44780_CTRL &= ~HD44780_EN;
-  _delay_us(1);
-  HD44780_CTRL |= HD44780_EN;
-  _delay_us(2);
-  HD44780_CTRL &= ~HD44780_EN;
-  _delay_us(2);
+  HD44780_CTRL |= _BV(HD44780_EN);
+  _delay_us(0.5);
+  HD44780_CTRL &= ~_BV(HD44780_EN);
+  _delay_us(0.5);
 }
 
 void hd44780_command(uint8_t data) { hd44780_send(data, false); }
@@ -73,10 +106,7 @@ void hd44780_putchar(char c) {
   }
 }
 
-void hd44780_clear() {
-  hd44780_command(HD44780_CLEARDISPLAY);
-  _delay_ms(2);
-}
+void hd44780_clear() { hd44780_command(HD44780_CLEARDISPLAY); }
 
 void hd44780_print(char *s) {
   // ensure that we are writing to DDRAM

@@ -4,24 +4,16 @@
 #include <avr/io.h>
 #include <stdbool.h>
 
-#define BIT0 (1 << 0)
-#define BIT1 (1 << 1)
-#define BIT2 (1 << 2)
-#define BIT3 (1 << 3)
-#define BIT4 (1 << 4)
-#define BIT5 (1 << 5)
-#define BIT6 (1 << 6)
-#define BIT7 (1 << 7)
-
-#define HD44780_DATA PORTB
+#define HD44780_DATA_OUT PORTB
+#define HD44780_DATA_IN PINB
 #define HD44780_DATA_DDR DDRB
 
 #define HD44780_CTRL PORTF
 #define HD44780_CTRL_DDR DDRF
 
-#define HD44780_RS BIT5
-#define HD44780_RW BIT6
-#define HD44780_EN BIT7
+#define HD44780_RS PF5
+#define HD44780_RW PF6
+#define HD44780_EN PF7
 
 /**
  * from Arduino LiquidCrystal library
