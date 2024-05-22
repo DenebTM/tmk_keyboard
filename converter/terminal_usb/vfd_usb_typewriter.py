@@ -26,7 +26,7 @@ def main():
 
     cur = 0
     while True:
-        ch = sys.stdin.read(1).encode()
+        ch = sys.stdin.read(1).encode('cp1252')
         if ch[0] in [3, 4]:
             break
 
