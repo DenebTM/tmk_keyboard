@@ -8,20 +8,29 @@
 #include <avr/interrupt.h>
 
 
-#define wdt_intr_enable(value)   \
-__asm__ __volatile__ (  \
-    "in __tmp_reg__,__SREG__" "\n\t"    \
-    "cli" "\n\t"    \
-    "wdr" "\n\t"    \
-    "sts %0,%1" "\n\t"  \
-    "out __SREG__,__tmp_reg__" "\n\t"   \
-    "sts %0,%2" "\n\t" \
-    : /* no outputs */  \
-    : "M" (_SFR_MEM_ADDR(_WD_CONTROL_REG)), \
-    "r" (_BV(_WD_CHANGE_BIT) | _BV(WDE)), \
-    "r" ((uint8_t) ((value & 0x08 ? _WD_PS3_MASK : 0x00) | \
-        _BV(WDIE) | (value & 0x07)) ) \
-    : "r0"  \
-)
+void wdt_intr_enable(uint8_t timeout) {
+    // disable interrupts and reset watchdog
+    cli();
+    wdt_reset();
+
+    // clear WDRF in MCUSR
+    MCUSR &= ~(1<<WDRF);
+
+    // start timed sequence to change WDE and prescaler bits
+    WDTCSR |= (1 << WDCE);
+    {
+        // set prescaler bits
+        WDTCSR = ((timeout & 0b111) << WDP0) | ((timeout & 0b1000) << WDP3);
+
+        // disable watchdog reset mode
+        WDTCSR &= ~(1 << WDE);
+    }
+
+    // enable watchdog interrupt mode
+    WDTCSR |= (1 << WDIE);
+
+    // re-enable interrupts
+    sei();
+}
 
 #endif
