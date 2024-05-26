@@ -12,7 +12,7 @@ SRC = 	keymap.c \
 	matrix.c \
 	led.c \
 	vfd_leds.c \
-	vfd_usb.c \
+	usb_cmd.c \
 	hd44780/hd44780.c
 
 CONFIG_H = config.h
@@ -96,3 +96,7 @@ include $(TMK_DIR)/protocol/lufa.mk
 include $(TMK_DIR)/protocol.mk
 include $(TMK_DIR)/common.mk
 include $(TMK_DIR)/rules.mk
+
+teensy: $(TARGET).hex
+	python usb_program.py
+	teensy_loader_cli -mmcu=$(MCU) -w -v $(TARGET).hex
